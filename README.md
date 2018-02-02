@@ -1,5 +1,5 @@
 # DocFlux
-[![npm](https://img.shields.io/npm/v/@harvest-profit/doc-flux.svg)](https://www.npmjs.com/package/@harvest-profit/doc-flux)  [![Build Status](https://travis-ci.org/HarvestProfit/@harvest-profit/doc-flux.svg?branch=master)](https://travis-ci.org/HarvestProfit/DocFlux) [![Coverage Status](https://coveralls.io/repos/github/HarvestProfit/DocFlux/badge.svg?branch=master)](https://coveralls.io/github/HarvestProfit/DocFlux?branch=master) [![npm](https://img.shields.io/npm/l/@harvest-profit/doc-flux.svg)](https://github.com/HarvestProfit/DocFlux/blob/master/LICENSE)
+[![npm](https://img.shields.io/npm/v/@harvest-profit/doc-flux.svg)](https://www.npmjs.com/package/@harvest-profit/doc-flux)  [![Build Status](https://travis-ci.org/HarvestProfit/DocFlux.svg?branch=master)](https://travis-ci.org/HarvestProfit/DocFlux) [![Coverage Status](https://coveralls.io/repos/github/HarvestProfit/DocFlux/badge.svg?branch=master)](https://coveralls.io/github/HarvestProfit/DocFlux?branch=master) [![npm](https://img.shields.io/npm/l/@harvest-profit/doc-flux.svg)](https://github.com/HarvestProfit/DocFlux/blob/master/LICENSE)
 
 Flux/React framework for creating any document, just define a few DOM components to transform into the document.
 
