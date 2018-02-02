@@ -3,6 +3,8 @@
 
 Flux/React framework for creating any document, just define a few DOM components to transform into the document.
 
+See an example of how to generate Spreadsheets https://github.com/humphreyja/sample-doc-flux-spreadsheets
+
 ## Development
 [Clone](https://help.github.com/articles/cloning-a-repository/) this repo, and begin committing changes. PRs are preferred over committing directly to master.
 
