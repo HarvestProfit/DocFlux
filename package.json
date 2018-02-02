@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src -d dist",
-    "build-docs": "node_modules/.bin/jsdoc --configure jsdoc.conf.json --verbose",
+    "build-docs": "jsdoc src/* -t ./node_modules/ink-docstrap/template --configure jsdoc.conf.json --destination docs --readme README.md",
     "clean": "rm -rf ./dist",
     "clean-docs": "rm -rf ./docs",
     "docs": "yarn run clean-docs && yarn run build-docs",
@@ -46,10 +46,10 @@
     "gh-pages": "^1.1.0",
     "ink-docstrap": "^1.3.2",
     "jest": "^22.0.4",
-    "jsdoc": "^3.5.5",
-    "minami": "^1.2.3"
+    "jsdoc": "^3.5.5"
   },
   "dependencies": {
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "prop-types": "^15.6.0"
   }
 }
