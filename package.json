@@ -26,6 +26,19 @@
       "^.+\\.jsx?$": "babel-jest"
     }
   },
+  "keywords": [
+    "harvest",
+    "profit",
+    "react",
+    "component",
+    "components",
+    "documents",
+    "document",
+    "flux",
+    "pdf",
+    "excel",
+    "csv"
+  ],
   "files": [
     "README.md",
     "dist"
@@ -38,6 +51,7 @@
     "babel-preset-airbnb": "^2.4.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
+    "coveralls": "^3.0.0",
     "eslint": "^4.9.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.7.0",
