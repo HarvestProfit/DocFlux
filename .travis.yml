@@ -9,17 +9,8 @@ cache:
 script:
   - yarn run test
   - yarn run build
-before_deploy:
-  - yarn run publish-docs
-deploy:
-  - provider: pages
-    email: awesome@harvestprofit.com
-    github_token: $GITHUB_TOKEN
-    local_dir: docs
-    name: Harvest Profit
-    on:
-      branch: master
-    skip_cleanup: true
+after_script:
+  - yarn run report-coverage
 branches:
   only:
   - master
