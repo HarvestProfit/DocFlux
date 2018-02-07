@@ -1,6 +1,6 @@
 {
   "name": "@harvest-profit/doc-flux",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Flux/React framework for creating any document, just define a few DOM components to transform into the document.",
   "main": "dist/index.js",
   "repository": "https://github.com/HarvestProfit/DocFlux",
