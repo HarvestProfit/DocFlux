@@ -7,6 +7,7 @@ import DocFlux from './DocFlux';
  */
 export default class DocFluxTest extends DocFlux {
   static shallow(component, parser, nest = true) {
+    if (!parser) return null;
     const parent = DocFlux;
     const self = DocFluxTest;
     const shallowFunc = (c, p) => self.shallow(c, p, nest);

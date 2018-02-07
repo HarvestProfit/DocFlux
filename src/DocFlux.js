@@ -11,7 +11,7 @@ import DOMComponent from './DOMComponent';
  */
 class Div extends Component {
   static propTypes = {
-    children: PropTypes.arrayOf(PropTypes.object).isRequired,
+    children: PropTypes.arrayOf(PropTypes.any).isRequired,
   }
 
   render() {
@@ -29,18 +29,6 @@ const setValue = (value, defaultValue) => {
 
 // Used to filter out invalid rendered items.
 const isValidSubValue = value => (value !== undefined && value !== null);
-
-
-// Parses the results of a component render and returns the first item in the
-// array that it always returns.
-const parseComponentResults = (value) => {
-  if (value === undefined || value === null) return null;
-  if (value.constructor === Array) {
-    if (value.length === 1) return value[0];
-    if (value.length === 0) return null;
-  }
-  return value;
-};
 
 /**
  * Doc Flux allows for creating a structure from a React style component system.
@@ -151,8 +139,7 @@ export default class DocFlux {
     const componentFunction = component.node;
     const props = DocFlux.parseProps(component.props, componentFunction.defaultProps);
     DocFlux.validateProps(props, componentFunction.propTypes, 'pure function');
-    const value = renderFunc(componentFunction(props), parser);
-    return parseComponentResults(value);
+    return renderFunc(componentFunction(props), parser);
   }
 
   static renderComponent(component, parser, renderFunc) {
@@ -160,12 +147,7 @@ export default class DocFlux {
     const props = DocFlux.parseProps(component.props, ComponentClass.defaultProps);
     DocFlux.validateProps(props, ComponentClass.propTypes, ComponentClass.name);
     const initializedComponent = new ComponentClass(props);
-    const value = renderFunc(initializedComponent.render(), parser);
-
-    if (DocFlux.isDivComponent(component)) {
-      return value;
-    }
-    return parseComponentResults(value);
+    return renderFunc(initializedComponent.render(), parser);
   }
 
   static renderComponentArray(components, parser, renderFunc) {
@@ -188,6 +170,7 @@ export default class DocFlux {
    * @return {array|object} The DOM (array if parent node is a div)
    */
   static render(component, parser) {
+    if (!parser) return null;
     const self = DocFlux;
     if (component === undefined || component === null) return null;
 
