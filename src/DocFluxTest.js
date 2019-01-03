@@ -6,6 +6,10 @@ import DocFlux from './DocFlux';
  * @module DocFluxTest
  */
 export default class DocFluxTest extends DocFlux {
+  static mount(component, parser) {
+    return DocFlux.render(component, parser);
+  }
+
   static shallow(component, parser, nest = true) {
     if (!parser) return null;
     const parent = DocFlux;

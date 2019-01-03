@@ -132,6 +132,7 @@ export default class DocFlux {
       ref: initializedComponent,
       value: renderFunc(initializedComponent.render(), parser),
       elementName: component.stringNodeName,
+      props,
     };
   }
 
@@ -217,7 +218,7 @@ export default class DocFlux {
     }
 
     if (fluxDOM.ref && fluxDOM.ref instanceof DOMComponent) {
-      return fluxDOM.ref.constructor.transform(fluxDOM.value, docBuilder);
+      return fluxDOM.ref.constructor.transform(fluxDOM, docBuilder);
     }
 
     return docBuilder;
