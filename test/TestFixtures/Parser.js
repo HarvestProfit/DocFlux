@@ -16,7 +16,7 @@ class H1 extends DOMComponent {
   }
 
   static transform(DOM) {
-    return DOM;
+    return DOM.value;
   }
 }
 

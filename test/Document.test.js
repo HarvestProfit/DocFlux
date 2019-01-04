@@ -3,7 +3,7 @@ import { DocFlux } from '../src';
 /** @jsx DocFlux.createElement */
 
 const DocComponent = () => (
-  <div><h1>Hey</h1></div>
+  <div><h1 style={{ color: 'red' }}>Hey</h1></div>
 );
 
 class Doc extends TestDocument {

@@ -92,7 +92,7 @@ describe('DocFlux', () => {
 
     it('should create a Component as a pure function', () => {
       const component = (<SimplePureFunctionComponent />);
-      expect(DocFlux.isPureFunctionComponent(component)).toBe(true);
+      expect(DocFlux.isComponent(component)).toBe(true);
     });
 
     it('should create a Component', () => {
@@ -173,19 +173,17 @@ describe('DocFlux', () => {
     it('should match DOM components', () => {
       const component = (<h1>HEY</h1>);
       const resolvedDOMNode = DocFlux.resolveDOMNode(component, Parser);
-      expect(DocFlux.isDOMComponent(resolvedDOMNode)).toBe(true);
+      expect(DocFlux.isComponent(resolvedDOMNode)).toBe(true);
     });
 
     it('should match class based components', () => {
       const component = (<SimpleComponent />);
       expect(DocFlux.isComponent(component)).toBe(true);
-      expect(DocFlux.isDOMComponent(component)).toBe(false);
     });
 
     it('should match pure function components', () => {
       const component = (<SimplePureFunctionComponent />);
-      expect(DocFlux.isPureFunctionComponent(component)).toBe(true);
-      expect(DocFlux.isComponent(component)).toBe(false);
+      expect(DocFlux.isComponent(component)).toBe(true);
     });
   });
 

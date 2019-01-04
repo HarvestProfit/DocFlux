@@ -6,6 +6,10 @@ import DocFlux from './DocFlux';
  * @module DocFluxTest
  */
 export default class DocFluxTest extends DocFlux {
+  static mount(component, parser) {
+    return DocFlux.render(component, parser);
+  }
+
   static shallow(component, parser, nest = true) {
     if (!parser) return null;
     const parent = DocFlux;
@@ -19,31 +23,23 @@ export default class DocFluxTest extends DocFlux {
       return shallowFunc(parent.resolveDOMNode(component, parser), parser);
     }
 
-    // Render DOM components
-    if (parent.isDOMComponent(component)) {
-      return parent.renderDOMComponent(component, parser, shallowFunc);
-    }
-
-    // Render components
-    if (parent.isComponent(component)) {
-      if (parent.isDivComponent(component)) {
-        return parent.renderComponent(component, parser, shallowFunc);
-      }
-
-      if (nest) {
-        return parent.renderComponent(component, parser, shallowEndNestFunc);
-      }
-    }
-
-    // Render components
-    if (parent.isPureFunctionComponent(component) && nest) {
-      return parent.renderPureFunctionComponent(component, parser, shallowEndNestFunc);
-    }
-
     // Clean arrays and render items.
     if (parent.isArray(component)) {
       return parent.renderComponentArray(component, parser, shallowFunc);
     }
+
+    // Render components
+    if (parent.isComponent(component)) {
+      if (component.stringNodeName) {
+        return parent.renderComponent(component, parser, shallowFunc);
+      }
+
+      if (nest) {
+        const val = parent.renderComponent(component, parser, shallowEndNestFunc);
+        return val;
+      }
+    }
+
     return component;
   }
 }

@@ -80,21 +80,6 @@ export default class DocFlux {
     return (typeof component.node === 'string');
   }
 
-  static isDOMComponent(component) {
-    if (!component.node) return false;
-    return (component.node.prototype instanceof DOMComponent);
-  }
-
-  static isComponent(component) {
-    if (!component.node) return false;
-    return (component.node.prototype instanceof Component);
-  }
-
-  static isPureFunctionComponent(component) {
-    if (!component.node) return false;
-    return (typeof component.node === 'function');
-  }
-
   static isArray(component) {
     return (component.constructor === Array);
   }
@@ -104,6 +89,7 @@ export default class DocFlux {
     if (!nodeComponent && component.node === 'div') {
       nodeComponent = Div;
     }
+
     return {
       node: nodeComponent,
       props: component.props,
@@ -116,38 +102,43 @@ export default class DocFlux {
     const DomComponent = parser[domNode];
     if (DomComponent) {
       const props = DocFlux.parseProps(component.props, DomComponent.defaultProps);
-      DocFlux.validateProps(props, DomComponent.propTypes, DomComponent.constructor.name);
+      DocFlux.validateProps(props, DomComponent.propTypes, DomComponent.name);
       const comp = new DomComponent(props);
       return renderFunc(comp, parser);
     }
     return null;
   }
 
-  static renderDOMComponent(component, parser, renderFunc) {
-    const ComponentClass = component.node;
-    const props = DocFlux.parseProps(component.props, ComponentClass.defaultProps);
-    DocFlux.validateProps(props, ComponentClass.propTypes, ComponentClass.constructor.name);
-    const initializedComponent = new ComponentClass(props);
-    return {
-      ref: initializedComponent,
-      value: renderFunc(initializedComponent.render(), parser),
-      elementName: component.stringNodeName,
-    };
-  }
+  static isComponent(component) {
+    if (!component.node) return false;
 
-  static renderPureFunctionComponent(component, parser, renderFunc) {
-    const componentFunction = component.node;
-    const props = DocFlux.parseProps(component.props, componentFunction.defaultProps);
-    DocFlux.validateProps(props, componentFunction.propTypes, 'pure function');
-    return renderFunc(componentFunction(props), parser);
+    if (typeof component.node.prototype === 'function') return true;
+    if (typeof component.node.prototype === 'object') return true;
+    return false;
   }
 
   static renderComponent(component, parser, renderFunc) {
     const ComponentClass = component.node;
     const props = DocFlux.parseProps(component.props, ComponentClass.defaultProps);
     DocFlux.validateProps(props, ComponentClass.propTypes, ComponentClass.name);
-    const initializedComponent = new ComponentClass(props);
-    return renderFunc(initializedComponent.render(), parser);
+
+    let value;
+    if (ComponentClass.prototype.render) {
+      const initializedComponent = new ComponentClass(props);
+      value = renderFunc(initializedComponent.render(), parser);
+      if (ComponentClass.transform) {
+        return {
+          ref: initializedComponent,
+          value,
+          elementName: component.stringNodeName,
+          props,
+        };
+      }
+    } else {
+      value = renderFunc(ComponentClass(props), parser);
+    }
+
+    return value;
   }
 
   static renderComponentArray(components, parser, renderFunc) {
@@ -174,13 +165,14 @@ export default class DocFlux {
     const self = DocFlux;
     if (component === undefined || component === null) return null;
 
+    // console.log('render', component, self.isDOMNode(component));
     if (self.isDOMNode(component) && parser) {
       return self.render(self.resolveDOMNode(component, parser), parser);
     }
 
-    // Render DOM components
-    if (self.isDOMComponent(component)) {
-      return self.renderDOMComponent(component, parser, self.render);
+    // Clean arrays and render items.
+    if (self.isArray(component)) {
+      return self.renderComponentArray(component, parser, self.render);
     }
 
     // Render components
@@ -188,15 +180,6 @@ export default class DocFlux {
       return self.renderComponent(component, parser, self.render);
     }
 
-    // Render components
-    if (self.isPureFunctionComponent(component)) {
-      return self.renderPureFunctionComponent(component, parser, self.render);
-    }
-
-    // Clean arrays and render items.
-    if (self.isArray(component)) {
-      return self.renderComponentArray(component, parser, self.render);
-    }
     return component;
   }
 
@@ -217,7 +200,7 @@ export default class DocFlux {
     }
 
     if (fluxDOM.ref && fluxDOM.ref instanceof DOMComponent) {
-      return fluxDOM.ref.constructor.transform(fluxDOM.value, docBuilder);
+      return fluxDOM.ref.constructor.transform(fluxDOM, docBuilder);
     }
 
     return docBuilder;

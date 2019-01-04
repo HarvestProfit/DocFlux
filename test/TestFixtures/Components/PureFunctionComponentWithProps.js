@@ -3,19 +3,19 @@ import { DocFlux } from '../../../src';
 /** @jsx DocFlux.createElement */
 
 // Component with props
-const TestComponent = props => (
+const PureFunctionComponentWithProps = props => (
   <div>
     <h1>{props.title} - {props.count}</h1>
   </div>
 );
 
-TestComponent.propTypes = {
+PureFunctionComponentWithProps.propTypes = {
   title: PropTypes.string.isRequired,
   count: PropTypes.number,
 };
 
-TestComponent.defaultProps = {
+PureFunctionComponentWithProps.defaultProps = {
   count: 1,
 };
 
-export default TestComponent;
+export default PureFunctionComponentWithProps;
