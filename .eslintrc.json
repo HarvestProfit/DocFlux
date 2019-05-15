@@ -8,5 +8,8 @@
       "react/no-deprecated": "off",
       "function-paren-newline": "off",
       "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    },
+    "globals": {
+      "Blob": true
     }
 }
