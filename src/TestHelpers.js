@@ -33,6 +33,7 @@ function mergeChildrenText(children) {
 
 export function flattenText(currentNode) {
   let result = '';
+  if (currentNode.node === undefined) return '';
   if (currentNode.component.props.children) {
     const childResult = mergeChildrenText(currentNode.component.props.children);
     if (childResult.length > 0) return childResult;
