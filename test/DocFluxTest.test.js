@@ -4,6 +4,7 @@ import { DocFluxTest } from '../src';
 import Parser from './TestFixtures/Parser';
 import SimpleComponent from './TestFixtures/Components/SimpleComponent';
 import ComponentWithChildren from './TestFixtures/Components/ComponentWithChildren';
+import ListComponent from './TestFixtures/Components/ListComponent';
 
 describe('DocFluxTest', () => {
   describe('shallow', () => {
@@ -11,12 +12,13 @@ describe('DocFluxTest', () => {
       const component = DocFluxTest.shallow(
         <ComponentWithChildren>
           <SimpleComponent />
+          <SimpleComponent />
         </ComponentWithChildren>,
         Parser,
       );
 
-      expect(component.constructor).toBe(Array);
-      expect(component[0].node).toBe(SimpleComponent);
+      expect(component.find(ComponentWithChildren).length).toEqual(1);
+      expect(component.find(SimpleComponent).length).toEqual(2);
     });
 
     it('should render the entire component as it has no internal components', () => {
@@ -27,8 +29,46 @@ describe('DocFluxTest', () => {
         Parser,
       );
 
-      expect(component.constructor).toBe(Array);
-      expect(component[0].value).toBe('Hey');
+      expect(component.text()).toBe('Hey');
+    });
+
+    it('should find list of nodes', () => {
+      const component = DocFluxTest.shallow(
+        <ul>
+          <li>One</li>
+          <li>Two</li>
+          <li>Three</li>
+          <ListComponent />
+        </ul>
+        ,
+        Parser,
+      );
+
+      expect(component.find('li').length).toEqual(4);
+      expect(component.find(ListComponent).length).toEqual(1);
+      expect(component.text()).toContain('Three');
+      expect(component.find('li').first().text()).toEqual('One');
+      expect(component.find('li').at(1).text()).toEqual('Two');
+      expect(component.find('li').at(2).text()).toEqual('Three');
+      expect(component.find('li').last().text()).toEqual('List Component!!');
+    });
+
+    it('should find list of nodes wrapped in a component', () => {
+      const component = DocFluxTest.shallow(
+        <ComponentWithChildren>
+          <ul>
+            <li>One</li>
+            <li>Two</li>
+            <li>Three</li>
+            <ListComponent />
+          </ul>
+        </ComponentWithChildren>
+        ,
+        Parser,
+      );
+
+      expect(component.find('li').length).toEqual(3);
+      expect(component.find(ListComponent).length).toEqual(1);
     });
   });
 });
