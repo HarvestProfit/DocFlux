@@ -4,7 +4,7 @@ import { DocFlux, Component } from '../../../src';
 /* eslint-disable react/prefer-stateless-function */
 
 // class based component
-export default class TestComponent extends Component {
+export default class SimpleComponent extends Component {
   render() {
     return (
       <div>

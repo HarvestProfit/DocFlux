@@ -1,6 +1,6 @@
 {
   "name": "@harvest-profit/doc-flux",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Flux/React framework for creating any document, just define a few DOM components to transform into the document.",
   "main": "dist/index.js",
   "repository": "https://github.com/HarvestProfit/DocFlux",
@@ -51,7 +51,7 @@
     "babel-preset-airbnb": "^2.4.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-stage-2": "^6.24.1",
-    "coveralls": "^3.0.0",
+    "coveralls": "^3.0.4",
     "eslint": "^4.9.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.7.0",

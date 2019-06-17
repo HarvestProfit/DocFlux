@@ -3,14 +3,14 @@ import { DocFlux } from '../../../src';
 /** @jsx DocFlux.createElement */
 
 // Component with children
-const TestComponent = props => (
+const ComponentWithChildren = props => (
   <div>
     {props.children}
   </div>
 );
 
-TestComponent.propTypes = {
+ComponentWithChildren.propTypes = {
   children: PropTypes.oneOfType([PropTypes.array, PropTypes.string]).isRequired,
 };
 
-export default TestComponent;
+export default ComponentWithChildren;
