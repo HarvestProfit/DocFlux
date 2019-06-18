@@ -1,6 +1,9 @@
 import DocFlux from './DocFlux';
 import Wrapper from './TestWrapper';
 
+// Used to filter out invalid rendered items.
+const isValidSubValue = value => (value !== undefined && value !== null);
+
 /**
  * Used to test Document components using the shallow command.  This will only
  * render the imediate component.
@@ -11,29 +14,59 @@ export default class DocFluxTest extends DocFlux {
     return DocFlux.render(component, parser);
   }
 
-  static shallow(component, parser, nest = true) {
-    if (!parser) return new Wrapper();
+  static renderComponentArray(components, renderFunc) {
+    const cleanedRender = components.filter(isValidSubValue);
+    const renderSubComponents = cleanedRender.map(comp =>
+      renderFunc(comp)).filter(isValidSubValue);
+    return renderSubComponents;
+  }
+
+  static renderComponent(component, renderFunc) {
+    const ComponentClass = component.node;
+    const props = DocFlux.parseProps(component.props, ComponentClass.defaultProps);
+    DocFlux.validateProps(props, ComponentClass.propTypes, ComponentClass.name);
+
+    let value;
+    if (ComponentClass.prototype.render) {
+      const initializedComponent = new ComponentClass(props);
+      value = renderFunc(initializedComponent.render());
+      if (ComponentClass.transform) {
+        return {
+          ref: initializedComponent,
+          value,
+          elementName: component.stringNodeName,
+          props,
+        };
+      }
+    } else {
+      value = renderFunc(ComponentClass(props));
+    }
+
+    return value;
+  }
+
+  static shallow(component, nest = true) {
     const parent = DocFlux;
     const self = DocFluxTest;
-    const shallowFunc = (c, p) => self.shallow(c, p, nest);
-    const shallowEndNestFunc = (c, p) => self.shallow(c, p, false);
+    const shallowFunc = c => self.shallow(c, nest);
+    const shallowEndNestFunc = c => self.shallow(c, false);
     if (component === undefined || component === null) return new Wrapper();
 
-    if (parent.isDOMNode(component) && parser) {
-      const tree = shallowFunc(component.props.children, parser);
+    if (parent.isDOMNode(component)) {
+      const tree = shallowFunc(component.props.children);
       return new Wrapper(component, tree);
     }
 
     // Clean arrays and render items.
     if (parent.isArray(component)) {
-      const tree = parent.renderComponentArray(component, parser, shallowFunc);
+      const tree = self.renderComponentArray(component, shallowFunc);
       return tree;
     }
 
     // Render components
     if (parent.isComponent(component)) {
       if (component.stringNodeName) {
-        let tree = parent.renderComponent(component, parser, shallowFunc);
+        let tree = self.renderComponent(component, shallowFunc);
         if (tree.ref) {
           tree = new Wrapper(tree);
         }
@@ -41,7 +74,7 @@ export default class DocFluxTest extends DocFlux {
       }
 
       if (nest) {
-        const tree = parent.renderComponent(component, parser, shallowEndNestFunc);
+        const tree = self.renderComponent(component, shallowEndNestFunc);
         return new Wrapper(component, tree);
       }
       return new Wrapper(component);

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Document } from '../../src';
-import Parser from './Parser';
+import Parser from './TestParser';
 
 export default class TestDocument extends Document {
   static propTypes = {

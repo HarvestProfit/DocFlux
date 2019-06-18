@@ -1,7 +1,6 @@
 import { DocFluxTest } from '../src';
 /** @jsx DocFluxTest.createElement */
 
-import Parser from './TestFixtures/Parser';
 import SimpleComponent from './TestFixtures/Components/SimpleComponent';
 import ComponentWithChildren from './TestFixtures/Components/ComponentWithChildren';
 import ListComponent from './TestFixtures/Components/ListComponent';
@@ -14,7 +13,6 @@ describe('DocFluxTest', () => {
           <SimpleComponent />
           <SimpleComponent />
         </ComponentWithChildren>,
-        Parser,
       );
 
       expect(component.find(ComponentWithChildren).length).toEqual(1);
@@ -26,7 +24,6 @@ describe('DocFluxTest', () => {
         <ComponentWithChildren>
           <h1>Hey</h1>
         </ComponentWithChildren>,
-        Parser,
       );
 
       expect(component.text()).toBe('Hey');
@@ -39,9 +36,7 @@ describe('DocFluxTest', () => {
           <li>Two</li>
           <li>Three</li>
           <ListComponent />
-        </ul>
-        ,
-        Parser,
+        </ul>,
       );
 
       expect(component.find('li').length).toEqual(4);
@@ -62,9 +57,7 @@ describe('DocFluxTest', () => {
             <li>Three</li>
             <ListComponent />
           </ul>
-        </ComponentWithChildren>
-        ,
-        Parser,
+        </ComponentWithChildren>,
       );
 
       expect(component.find('li').length).toEqual(3);
@@ -77,9 +70,7 @@ describe('DocFluxTest', () => {
           <li>{1}</li>
           <li>{2}</li>
           <li>{3}</li>
-        </ul>
-        ,
-        Parser,
+        </ul>,
       );
       expect(component.find('li').text()).toContain('1');
       expect(component.find('li').text()).toContain('2');

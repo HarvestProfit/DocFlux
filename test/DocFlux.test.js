@@ -1,7 +1,7 @@
 import { DocFlux } from '../src';
 /** @jsx DocFlux.createElement */
 
-import Parser from './TestFixtures/Parser';
+import Parser from './TestFixtures/TestParser';
 import SimpleComponent from './TestFixtures/Components/SimpleComponent';
 import SimplePureFunctionComponent from './TestFixtures/Components/SimplePureFunctionComponent';
 import ComponentWithChildren from './TestFixtures/Components/ComponentWithChildren';
@@ -18,7 +18,7 @@ describe('DocFlux', () => {
     it('should render a DOM node', () => {
       const component = DocFlux.render(<h1>HEY</h1>, Parser);
       expect(component.ref instanceof Parser.h1).toBe(true);
-      expect(component.value).toBe('HEY');
+      expect(component.value).toEqual(['HEY']);
     });
 
     it('should render an empty div', () => {
@@ -31,7 +31,7 @@ describe('DocFlux', () => {
       expect(component.constructor).toBe(Array);
       const h1 = component[0];
       expect(h1.ref instanceof Parser.h1).toBe(true);
-      expect(h1.value).toBe('Hey');
+      expect(h1.value).toEqual(['Hey']);
     });
 
     it('should render a Component', () => {
@@ -39,7 +39,7 @@ describe('DocFlux', () => {
       expect(component.constructor).toBe(Array);
       const h1 = component[0];
       expect(h1.ref instanceof Parser.h1).toBe(true);
-      expect(h1.value).toBe('Hey');
+      expect(h1.value).toEqual(['Hey']);
     });
 
     it('should render a Pure Function Component', () => {
@@ -47,7 +47,7 @@ describe('DocFlux', () => {
       expect(component.constructor).toBe(Array);
       const h1 = component[0];
       expect(h1.ref instanceof Parser.h1).toBe(true);
-      expect(h1.value).toBe('Hey');
+      expect(h1.value).toEqual(['Hey']);
     });
 
     it('should render a div with a Component', () => {
@@ -57,7 +57,7 @@ describe('DocFlux', () => {
       expect(innerDiv.constructor).toBe(Array);
       const h1 = innerDiv[0];
       expect(h1.ref instanceof Parser.h1).toBe(true);
-      expect(h1.value).toBe('Hey');
+      expect(h1.value).toEqual(['Hey']);
     });
 
     it('should render a div with a Component with children', () => {
@@ -67,7 +67,7 @@ describe('DocFlux', () => {
         </div>, Parser);
 
       expect(component.constructor).toBe(Array);
-      expect(component[0][0]).toBe('Hey');
+      expect(component[0][0]).toEqual('Hey');
     });
 
     it('should render a Component with children', () => {
@@ -78,9 +78,9 @@ describe('DocFlux', () => {
         </ComponentWithChildren>, Parser);
 
       expect(component[0].ref instanceof Parser.h1).toBe(true);
-      expect(component[0].value).toBe('Hey');
+      expect(component[0].value).toEqual(['Hey']);
       expect(component[1].ref instanceof Parser.h1).toBe(true);
-      expect(component[1].value).toBe('You');
+      expect(component[1].value).toEqual(['You']);
     });
   });
 
@@ -131,12 +131,12 @@ describe('DocFlux', () => {
   describe('props', () => {
     it('should create a Component with all props and default props set up', () => {
       const component = DocFlux.render(<ComponentWithProps title="test string" />, Parser);
-      expect(component[0].value).toBe('test string - 1');
+      expect(component[0].value).toEqual(['test string', ' - ', 1]);
     });
 
     it('should create a Pure Function Component with all props and default props set up', () => {
       const component = DocFlux.render(<PureFunctionComponentWithProps title="test string" />, Parser);
-      expect(component[0].value).toBe('test string - 1');
+      expect(component[0].value).toEqual(['test string', ' - ', 1]);
     });
 
     it('should return only the props provided', () => {
@@ -197,7 +197,7 @@ describe('DocFlux', () => {
       );
 
       const result = DocFlux.transform(DOM, {});
-      expect(result).toEqual('Hey');
+      expect(result).toEqual(['Hey']);
     });
   });
 });
