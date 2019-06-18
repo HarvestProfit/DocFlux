@@ -81,7 +81,6 @@ describe('DocFluxTest', () => {
         ,
         Parser,
       );
-      console.log(component.find('li'));
       expect(component.find('li').text()).toContain('1');
       expect(component.find('li').text()).toContain('2');
       expect(component.find('li').text()).toContain('3');
