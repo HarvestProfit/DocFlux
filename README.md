@@ -80,36 +80,35 @@ export default Table;
 ```
 ### Testing
 
-For testing, this uses a similar API to `enzyme`.  You can shallow render the component (which only renders the component and not any child components).  Then you can actively `find` or get `text` from the rendered component. **Notice!** You will need to provide a parser for the component tree.  Why?  Because like in the above component, the Spreadsheet parser defines the `tname` tag whereas the PDF parser does not.  Each may have its own rules.  It just depends on what you want to test. You can `find` by tag name or component name.
+For testing, this uses a similar API to `enzyme`.  You can shallow render the component (which only renders the component and not any child components).  Then you can actively `find` or get `text` from the rendered component. You can `find` by tag name or component name.
 
 Additionally, you can use `at(index)`, `first()`, or `last()` on any `find` results.  
 
 ```js
 import { DocFluxTest } from '@harvest-profit/doc-flux';
-import { Parser } from '@harvest-profit/doc-flux-pdfs';
 /** @jsx DocFluxTest.createElement */
 import Table from './Table';
 import RandomRow from './RandomRow';
 
 describe('<Table />', () => {
   it('should render', () => {
-    const wrapper = DocFluxTest.shallow((
+    const wrapper = DocFluxTest.shallow(
       <Table
         name="Jake"
         age={100}
       />
-    ), Parser);
+    );
     expect(wrapper.find('tr').text()).toContain('Jake');
     expect(wrapper.find('tr').first().text()).toContain('Jake');
   });
 
   it('should find the RandomRow component', () => {
-    const wrapper = DocFluxTest.shallow((
+    const wrapper = DocFluxTest.shallow(
       <Table
         name="Jake"
         age={100}
       />
-    ), Parser);
+    );
     expect(wrapper.find(RandomRow).length).toEqual(1);
   });
 });
