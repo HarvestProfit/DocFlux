@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="module-Component.html">Component</a></li><li><a href="module-Div.html">Div</a></li><li><a href="module-DocFlux.html">DocFlux</a></li><li><a href="module-DocFluxTest.html">DocFluxTest</a></li><li><a href="module-Document.html">Document</a></li><li><a href="module-DOMComponent.html">DOMComponent</a></li>
+					<li><a href="module-Component.html">Component</a></li><li><a href="module-Div.html">Div</a></li><li><a href="module-DocFlux.html">DocFlux</a></li><li><a href="module-DocFluxTest.html">DocFluxTest</a></li><li><a href="module-Document.html">Document</a></li><li><a href="module-DOMComponent.html">DOMComponent</a></li><li><a href="module-Wrapper.html">Wrapper</a></li>
 				</ul>
 			</li>
 			
@@ -86,21 +86,134 @@
 
 
     <section class="readme-section">
-        <article><h1>DocFlux</h1><p><a href="https://www.npmjs.com/package/@harvest-profit/doc-flux"><img src="https://img.shields.io/npm/v/@harvest-profit/doc-flux.svg" alt="npm"></a>  <a href="https://travis-ci.org/HarvestProfit/DocFlux"><img src="https://travis-ci.org/HarvestProfit/DocFlux.svg?branch=master" alt="Build Status"></a>  <a href="https://coveralls.io/github/HarvestProfit/DocFlux?branch=master"><img src="https://coveralls.io/repos/github/HarvestProfit/DocFlux/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://github.com/HarvestProfit/DocFlux/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/@harvest-profit/doc-flux.svg" alt="npm"></a></p>
+        <article><h1>DocFlux</h1>
+<p><a href="https://www.npmjs.com/package/@harvest-profit/doc-flux"><img src="https://img.shields.io/npm/v/@harvest-profit/doc-flux.svg" alt="npm"></a>  <a href="https://travis-ci.org/HarvestProfit/DocFlux"><img src="https://travis-ci.org/HarvestProfit/DocFlux.svg?branch=master" alt="Build Status"></a>  <a href="https://coveralls.io/github/HarvestProfit/DocFlux?branch=master"><img src="https://coveralls.io/repos/github/HarvestProfit/DocFlux/badge.svg?branch=master" alt="Coverage Status"></a> <a href="https://github.com/HarvestProfit/DocFlux/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/@harvest-profit/doc-flux.svg" alt="npm"></a></p>
 <p>Flux/React framework for creating any document, just define a few DOM components to transform into the document.</p>
 <p>See an example of how to generate Spreadsheets https://github.com/humphreyja/sample-doc-flux-spreadsheets</p>
-<h2>Development</h2><p><a href="https://help.github.com/articles/cloning-a-repository/">Clone</a> this repo, and begin committing changes. PRs are preferred over committing directly to master.</p>
+<h1>Examples</h1>
+<h3>Documents</h3>
+<p>To start, you must define a document.  Think of this as the root.  You will define a few document metadata options and specify which component it will render.  Below I am using the <a href="https://github.com/HarvestProfit/DocFlux-PDFs">DocFlux PDFS</a> package to create a pdf that uses the <code>Table</code> component specified in the next section.  <code>documentSettings</code> takes options specified in <a href="https://pdfmake.github.io/docs/document-definition-object/document-medatadata/">PDFMake</a> document metadata docs.</p>
+<pre class="prettyprint source lang-js"><code>import PropTypes from 'prop-types';
+import { Document } from '@harvest-profit/doc-flux-pdfs';
+import Table from './Table';
+
+class TablePDF extends Document {
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+    age: PropTypes.number.isRequired,
+  };
+
+  static styleSheet() {
+    return {
+      td: {
+        fontSize: 11,
+        marginTop: 2,
+        marginBottom: 2,
+      }
+    };
+  }
+
+  static documentSettings(props) {
+    return {
+      name: `People: ${props.name}`,
+      pageMargins: [30, 50, 30, 50],
+      pageOrientation: 'portrait',
+    };
+  }
+
+  static component = Table;
+}
+
+export default TablePDF;
+</code></pre>
+<h3>Components</h3>
+<p>The following is a sample component that will render a table.  Notice, the <code>tname</code> tag.  This is a special tag created from the <a href="https://github.com/HarvestProfit/DocFlux-Spreadsheets">DocFlux Spreadsheets</a> package.  It names the tab to <code>People</code> in excel.  For PDFs, this will be ignored.  <strong>NOTICE:</strong> For this to work, you must either import <code>doc-flux</code> as <code>React</code> or change the babel parser like the following:</p>
+<pre class="prettyprint source lang-js"><code>import DocFlux from '@harvest-profit/doc-flux';
+/** @jsx DocFlux.createElement */
+
+//... rest of component file
+</code></pre>
+<p>It is easier to just specify it as <code>React</code></p>
+<pre class="prettyprint source lang-js"><code>import PropTypes from 'prop-types';
+import React from '@harvest-profit/doc-flux';
+import RandomRow from './RandomRow';
+
+const Table = (props) => (
+  &lt;table>
+    &lt;tname>People&lt;/tname>
+    &lt;thead>
+      &lt;th>Name&lt;/th>
+      &lt;th>Age&lt;/th>
+    &lt;/thead>
+    &lt;tbody>
+      &lt;tr>
+        &lt;td>{props.name}&lt;/td>
+        &lt;td>{props.age}&lt;/td>
+      &lt;/tr>
+      &lt;RandomRow />
+    &lt;/tbody>
+  &lt;/table>
+)
+
+Table.propTypes = {
+  name: PropTypes.string.isRequired,
+  age: PropTypes.number.isRequired,
+};
+
+export default Table;
+</code></pre>
+<h3>Testing</h3>
+<p>For testing, this uses a similar API to <code>enzyme</code>.  You can shallow render the component (which only renders the component and not any child components).  Then you can actively <code>find</code> or get <code>text</code> from the rendered component. You can <code>find</code> by tag name or component name.</p>
+<p>Additionally, you can use <code>at(index)</code>, <code>first()</code>, or <code>last()</code> on any <code>find</code> results.</p>
+<pre class="prettyprint source lang-js"><code>import React, { shallow } from '@harvest-profit/doc-flux';
+import Table from './Table';
+import RandomRow from './RandomRow';
+
+describe('&lt;Table />', () => {
+  it('should render', () => {
+    const wrapper = shallow(
+      &lt;Table
+        name=&quot;Jake&quot;
+        age={100}
+      />
+    );
+    expect(wrapper.find('tr').text()).toContain('Jake');
+    expect(wrapper.find('tr').first().text()).toContain('Jake');
+  });
+
+  it('should find the RandomRow component', () => {
+    const wrapper = shallow(
+      &lt;Table
+        name=&quot;Jake&quot;
+        age={100}
+      />
+    );
+    expect(wrapper.find(RandomRow).length).toEqual(1);
+  });
+});
+</code></pre>
+<h2>Development</h2>
+<p><a href="https://help.github.com/articles/cloning-a-repository/">Clone</a> this repo, and begin committing changes. PRs are preferred over committing directly to master.</p>
 <p>To run tests locally on your machine, run the following:</p>
-<pre class="prettyprint source lang-bash"><code>yarn run test</code></pre><p>To preview documentation locally on your machine, run the following:</p>
-<pre class="prettyprint source lang-bash"><code>yarn run build-docs</code></pre><p>After merging your pull request, consider updating the documentation with the following command:</p>
-<pre class="prettyprint source lang-bash"><code>yarn run publish-docs</code></pre><p>To deploy a new version to NPM, bump the version number, commit/merge to <code>master</code>, and run the following:</p>
+<pre class="prettyprint source lang-bash"><code>yarn run test
+</code></pre>
+<p>To preview documentation locally on your machine, run the following:</p>
+<pre class="prettyprint source lang-bash"><code>yarn run build-docs
+</code></pre>
+<p>After merging your pull request, consider updating the documentation with the following command:</p>
+<pre class="prettyprint source lang-bash"><code>yarn run publish-docs
+</code></pre>
+<p>To deploy a new version to NPM, bump the version number, commit/merge to <code>master</code>, and run the following:</p>
 <pre class="prettyprint source lang-bash"><code>yarn run clean
 yarn run build
 
 # Either NPM
 npm publish
 # Or Yarn, they do the same thing
-yarn publish</code></pre><h2>License</h2><p>This project is <a href="https://github.com/HarvestProfit/DocFlux/blob/master/LICENSE">MIT licensed</a></p></article>
+yarn publish
+</code></pre>
+<h2>License</h2>
+<p>This project is <a href="https://github.com/HarvestProfit/DocFlux/blob/master/LICENSE">MIT licensed</a></p></article>
     </section>
 
 
@@ -144,7 +257,7 @@ yarn publish</code></pre><h2>License</h2><p>This project is <a href="https://git
 
 
 <span class="jsdoc-message">
-	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.2</a>
 	
 	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
 </span>
