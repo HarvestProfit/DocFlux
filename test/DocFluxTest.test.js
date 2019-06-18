@@ -70,5 +70,21 @@ describe('DocFluxTest', () => {
       expect(component.find('li').length).toEqual(3);
       expect(component.find(ListComponent).length).toEqual(1);
     });
+
+    it('should support arrays and numbers', () => {
+      const component = DocFluxTest.shallow(
+        <ul>
+          <li>{1}</li>
+          <li>{2}</li>
+          <li>{3}</li>
+        </ul>
+        ,
+        Parser,
+      );
+      console.log(component.find('li'));
+      expect(component.find('li').text()).toContain('1');
+      expect(component.find('li').text()).toContain('2');
+      expect(component.find('li').text()).toContain('3');
+    });
   });
 });
