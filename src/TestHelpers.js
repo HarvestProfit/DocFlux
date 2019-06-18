@@ -28,18 +28,21 @@ export function findNodes(elementOrComponent, currentNode) {
 }
 
 function mergeChildrenText(children) {
-  return children.reduce((final, child) => (typeof child === 'string' ? child + final : final), '');
+  return children.reduce((final, child) => {
+    if (typeof child === 'string') return child + final;
+    if (typeof child === 'number') return child.toString() + final;
+    return final;
+  }, '');
 }
 
 export function flattenText(currentNode) {
   let result = '';
-  if (currentNode.node === undefined) return '';
-  if (currentNode.component.props.children) {
+  if (currentNode.component && currentNode.component.props.children) {
     const childResult = mergeChildrenText(currentNode.component.props.children);
     if (childResult.length > 0) return childResult;
   }
 
-  for (let i = 0; i < currentNode.tree.length; i += 1) {
+  for (let i = 0; i < (currentNode.tree || []).length; i += 1) {
     const currentChild = currentNode.tree[i];
     result += flattenText(currentChild);
   }
