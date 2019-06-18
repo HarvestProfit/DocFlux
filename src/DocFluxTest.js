@@ -45,6 +45,13 @@ export default class DocFluxTest extends DocFlux {
     return value;
   }
 
+  /**
+   * Shallow renders only the imediate component tree
+   * @static
+   * @function
+   * @param {Component} JSXComponent A component to shallow render
+   * @return {Wrapper} A test wrapper representing the tree
+   */
   static shallow(component, nest = true) {
     const parent = DocFlux;
     const self = DocFluxTest;

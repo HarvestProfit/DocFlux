@@ -46,12 +46,19 @@ export default TablePDF;
 ```
 
 ### Components
-The following is a sample component that will render a table.  Notice, the `tname` tag.  This is a special tag created from the [DocFlux Spreadsheets](https://github.com/HarvestProfit/DocFlux-Spreadsheets) package.  It names the tab to `People` in excel.  For PDFs, this will be ignored.
+The following is a sample component that will render a table.  Notice, the `tname` tag.  This is a special tag created from the [DocFlux Spreadsheets](https://github.com/HarvestProfit/DocFlux-Spreadsheets) package.  It names the tab to `People` in excel.  For PDFs, this will be ignored.  **NOTICE:** For this to work, you must either import `doc-flux` as `React` or change the babel parser like the following:
+
+```js
+import DocFlux from '@harvest-profit/doc-flux';
+/** @jsx DocFlux.createElement */
+
+//... rest of component file
+```
+ It is easier to just specify it as `React`
 
 ```js
 import PropTypes from 'prop-types';
-import { DocFlux } from '@harvest-profit/doc-flux';
-/** @jsx DocFlux.createElement */
+import React from '@harvest-profit/doc-flux';
 import RandomRow from './RandomRow';
 
 const Table = (props) => (
@@ -85,14 +92,13 @@ For testing, this uses a similar API to `enzyme`.  You can shallow render the co
 Additionally, you can use `at(index)`, `first()`, or `last()` on any `find` results.  
 
 ```js
-import { DocFluxTest } from '@harvest-profit/doc-flux';
-/** @jsx DocFluxTest.createElement */
+import React, { shallow } from '@harvest-profit/doc-flux';
 import Table from './Table';
 import RandomRow from './RandomRow';
 
 describe('<Table />', () => {
   it('should render', () => {
-    const wrapper = DocFluxTest.shallow(
+    const wrapper = shallow(
       <Table
         name="Jake"
         age={100}
@@ -103,7 +109,7 @@ describe('<Table />', () => {
   });
 
   it('should find the RandomRow component', () => {
-    const wrapper = DocFluxTest.shallow(
+    const wrapper = shallow(
       <Table
         name="Jake"
         age={100}

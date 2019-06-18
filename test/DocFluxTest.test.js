@@ -1,5 +1,4 @@
-import { DocFluxTest } from '../src';
-/** @jsx DocFluxTest.createElement */
+import React, { shallow } from '../src';
 
 import SimpleComponent from './TestFixtures/Components/SimpleComponent';
 import ComponentWithChildren from './TestFixtures/Components/ComponentWithChildren';
@@ -8,7 +7,7 @@ import ListComponent from './TestFixtures/Components/ListComponent';
 describe('DocFluxTest', () => {
   describe('shallow', () => {
     it('should render only the root component', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ComponentWithChildren>
           <SimpleComponent />
           <SimpleComponent />
@@ -20,7 +19,7 @@ describe('DocFluxTest', () => {
     });
 
     it('should render the entire component as it has no internal components', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ComponentWithChildren>
           <h1>Hey</h1>
         </ComponentWithChildren>,
@@ -30,7 +29,7 @@ describe('DocFluxTest', () => {
     });
 
     it('should find list of nodes', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ul>
           <li>One</li>
           <li>Two</li>
@@ -49,7 +48,7 @@ describe('DocFluxTest', () => {
     });
 
     it('should find list of nodes wrapped in a component', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ComponentWithChildren>
           <ul>
             <li>One</li>
@@ -65,7 +64,7 @@ describe('DocFluxTest', () => {
     });
 
     it('should support arrays and numbers', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ul>
           <li>{1}</li>
           <li>{2}</li>

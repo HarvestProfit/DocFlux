@@ -1,6 +1,5 @@
 import TestDocument from './TestFixtures/TestDocument';
-import { DocFlux } from '../src';
-/** @jsx DocFlux.createElement */
+import React from '../src';
 
 const DocComponent = () => (
   <div><h1 style={{ color: 'red' }}>Hey</h1></div>
