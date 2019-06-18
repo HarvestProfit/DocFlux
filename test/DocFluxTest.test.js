@@ -1,7 +1,5 @@
-import { DocFluxTest } from '../src';
-/** @jsx DocFluxTest.createElement */
+import React, { shallow } from '../src';
 
-import Parser from './TestFixtures/Parser';
 import SimpleComponent from './TestFixtures/Components/SimpleComponent';
 import ComponentWithChildren from './TestFixtures/Components/ComponentWithChildren';
 import ListComponent from './TestFixtures/Components/ListComponent';
@@ -9,12 +7,11 @@ import ListComponent from './TestFixtures/Components/ListComponent';
 describe('DocFluxTest', () => {
   describe('shallow', () => {
     it('should render only the root component', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ComponentWithChildren>
           <SimpleComponent />
           <SimpleComponent />
         </ComponentWithChildren>,
-        Parser,
       );
 
       expect(component.find(ComponentWithChildren).length).toEqual(1);
@@ -22,26 +19,23 @@ describe('DocFluxTest', () => {
     });
 
     it('should render the entire component as it has no internal components', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ComponentWithChildren>
           <h1>Hey</h1>
         </ComponentWithChildren>,
-        Parser,
       );
 
       expect(component.text()).toBe('Hey');
     });
 
     it('should find list of nodes', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ul>
           <li>One</li>
           <li>Two</li>
           <li>Three</li>
           <ListComponent />
-        </ul>
-        ,
-        Parser,
+        </ul>,
       );
 
       expect(component.find('li').length).toEqual(4);
@@ -54,7 +48,7 @@ describe('DocFluxTest', () => {
     });
 
     it('should find list of nodes wrapped in a component', () => {
-      const component = DocFluxTest.shallow(
+      const component = shallow(
         <ComponentWithChildren>
           <ul>
             <li>One</li>
@@ -62,13 +56,24 @@ describe('DocFluxTest', () => {
             <li>Three</li>
             <ListComponent />
           </ul>
-        </ComponentWithChildren>
-        ,
-        Parser,
+        </ComponentWithChildren>,
       );
 
       expect(component.find('li').length).toEqual(3);
       expect(component.find(ListComponent).length).toEqual(1);
+    });
+
+    it('should support arrays and numbers', () => {
+      const component = shallow(
+        <ul>
+          <li>{1}</li>
+          <li>{2}</li>
+          <li>{3}</li>
+        </ul>,
+      );
+      expect(component.find('li').text()).toContain('1');
+      expect(component.find('li').text()).toContain('2');
+      expect(component.find('li').text()).toContain('3');
     });
   });
 });

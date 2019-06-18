@@ -13,3 +13,9 @@ export {
   DocFlux,
   DocFluxTest,
 };
+
+export function shallow(component) {
+  return DocFluxTest.shallow(component);
+}
+
+export default DocFlux;

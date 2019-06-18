@@ -1,6 +1,5 @@
 import TestDocument from './TestFixtures/TestDocument';
-import { DocFlux } from '../src';
-/** @jsx DocFlux.createElement */
+import React from '../src';
 
 const DocComponent = () => (
   <div><h1 style={{ color: 'red' }}>Hey</h1></div>
@@ -20,7 +19,7 @@ describe('Document', () => {
       const doc = Doc.create(props);
       expect(doc.name).toBe('test document');
       expect(doc.props.optional).toBe('default');
-      expect(doc.doc).toBe('Hey');
+      expect(doc.doc).toEqual(['Hey']);
     });
   });
 });
