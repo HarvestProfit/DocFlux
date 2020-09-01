@@ -3,7 +3,7 @@ import { DocFlux } from '../../../src';
 /** @jsx DocFlux.createElement */
 
 // Component with children
-const ComponentWithChildren = props => (
+const ComponentWithChildren = (props) => (
   <div>
     {props.children}
   </div>

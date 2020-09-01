@@ -91,7 +91,8 @@ describe('DocFlux', () => {
       const component = DocFlux.render(
         <div>
           <ComponentWithChildren>Hey</ComponentWithChildren>
-        </div>, Parser);
+        </div>, Parser,
+      );
 
       expect(component.constructor).toBe(Array);
       expect(component[0][0]).toEqual('Hey');
@@ -102,7 +103,8 @@ describe('DocFlux', () => {
         <ComponentWithChildren>
           <h1>Hey</h1>
           <h1>You</h1>
-        </ComponentWithChildren>, Parser);
+        </ComponentWithChildren>, Parser,
+      );
 
       expect(component[0].ref instanceof Parser.h1).toBe(true);
       expect(component[0].value).toEqual(['Hey']);

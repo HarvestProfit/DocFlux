@@ -13,6 +13,7 @@ export default class TestDocument extends Document {
   }
 
   static parser = Parser;
+
   static createDocument(doc, props) {
     return {
       name: props.name,
