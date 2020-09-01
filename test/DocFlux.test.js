@@ -1,4 +1,5 @@
 import { DocFlux } from '../src';
+import { flatten } from '../src/DocFlux';
 /** @jsx DocFlux.createElement */
 
 import Parser from './TestFixtures/TestParser';
@@ -14,6 +15,32 @@ console.error = jest.fn((error) => {
 });
 
 describe('DocFlux', () => {
+  describe('flatten', () => {
+    it('should flatten an array of components', () => {
+      const a = [
+        <SimpleComponent />,
+        [<SimpleComponent />, <SimpleComponent />, [<SimplePureFunctionComponent />]]];
+      expect(flatten(a).length).toBe(4);
+    });
+  });
+  describe('isComponent', () => {
+    it('should be a component for class based components', () => {
+      expect(DocFlux.isComponent(<SimpleComponent />)).toBe(true);
+    });
+
+    it('should be a component for pure function based components', () => {
+      expect(DocFlux.isComponent(<SimplePureFunctionComponent />)).toBe(true);
+    });
+
+    it('should not be a component for array', () => {
+      expect(DocFlux.isComponent([<SimplePureFunctionComponent />])).toBe(false);
+    });
+
+    it('should not be a component for object', () => {
+      expect(DocFlux.isComponent({ node: 'cool' })).toBe(false);
+    });
+  });
+
   describe('render', () => {
     it('should render a DOM node', () => {
       const component = DocFlux.render(<h1>HEY</h1>, Parser);

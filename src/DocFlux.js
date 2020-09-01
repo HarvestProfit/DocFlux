@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import Component from './Component';
 import DOMComponent from './DOMComponent';
@@ -17,6 +16,13 @@ class Div extends Component {
   render() {
     return this.props.children;
   }
+}
+
+export function flatten(arr) {
+  return arr.reduce(
+    (flat, toFlatten) => flat.concat(
+      Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten,
+    ), []);
 }
 
 // Returns a value or default value
@@ -67,7 +73,7 @@ export default class DocFlux {
   static createElement(JSXComponent, props, ...children) {
     const propsWithChildren = { ...props };
     if (children) {
-      propsWithChildren.children = _.flattenDeep(children);
+      propsWithChildren.children = flatten(children);
     }
 
     return {
@@ -113,6 +119,7 @@ export default class DocFlux {
     if (!component.node) return false;
 
     if (typeof component.node.prototype === 'function') return true;
+    if (typeof component.node === 'function') return true;
     if (typeof component.node.prototype === 'object') return true;
     return false;
   }
@@ -123,7 +130,7 @@ export default class DocFlux {
     DocFlux.validateProps(props, ComponentClass.propTypes, ComponentClass.name);
 
     let value;
-    if (ComponentClass.prototype.render) {
+    if (ComponentClass.prototype && ComponentClass.prototype.render) {
       const initializedComponent = new ComponentClass(props);
       value = renderFunc(initializedComponent.render(), parser);
       if (ComponentClass.transform) {
