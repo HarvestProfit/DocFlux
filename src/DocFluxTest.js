@@ -2,7 +2,7 @@ import DocFlux from './DocFlux';
 import Wrapper from './TestWrapper';
 
 // Used to filter out invalid rendered items.
-const isValidSubValue = value => (value !== undefined && value !== null);
+const isValidSubValue = (value) => (value !== undefined && value !== null);
 
 /**
  * Used to test Document components using the shallow command.  This will only
@@ -16,8 +16,9 @@ export default class DocFluxTest extends DocFlux {
 
   static renderComponentArray(components, renderFunc) {
     const cleanedRender = components.filter(isValidSubValue);
-    const renderSubComponents = cleanedRender.map(comp =>
-      renderFunc(comp)).filter(isValidSubValue);
+    const renderSubComponents = cleanedRender.map(
+      (comp) => renderFunc(comp),
+    ).filter(isValidSubValue);
     return renderSubComponents;
   }
 
@@ -27,7 +28,7 @@ export default class DocFluxTest extends DocFlux {
     DocFlux.validateProps(props, ComponentClass.propTypes, ComponentClass.name);
 
     let value;
-    if (ComponentClass.prototype.render) {
+    if (ComponentClass.prototype && ComponentClass.prototype.render) {
       const initializedComponent = new ComponentClass(props);
       value = renderFunc(initializedComponent.render());
       if (ComponentClass.transform) {
@@ -55,8 +56,8 @@ export default class DocFluxTest extends DocFlux {
   static shallow(component, nest = true) {
     const parent = DocFlux;
     const self = DocFluxTest;
-    const shallowFunc = c => self.shallow(c, nest);
-    const shallowEndNestFunc = c => self.shallow(c, false);
+    const shallowFunc = (c) => self.shallow(c, nest);
+    const shallowEndNestFunc = (c) => self.shallow(c, false);
     if (component === undefined || component === null) return new Wrapper();
 
     if (parent.isDOMNode(component)) {

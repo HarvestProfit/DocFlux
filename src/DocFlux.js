@@ -22,7 +22,8 @@ export function flatten(arr) {
   return arr.reduce(
     (flat, toFlatten) => flat.concat(
       Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten,
-    ), []);
+    ), [],
+  );
 }
 
 // Returns a value or default value
@@ -34,7 +35,7 @@ const setValue = (value, defaultValue) => {
 };
 
 // Used to filter out invalid rendered items.
-const isValidSubValue = value => (value !== undefined && value !== null);
+const isValidSubValue = (value) => (value !== undefined && value !== null);
 
 /**
  * Doc Flux allows for creating a structure from a React style component system.
@@ -150,8 +151,9 @@ export default class DocFlux {
 
   static renderComponentArray(components, parser, renderFunc) {
     const cleanedRender = components.filter(isValidSubValue);
-    const renderSubComponents = cleanedRender.map(comp =>
-      renderFunc(comp, parser)).filter(isValidSubValue);
+    const renderSubComponents = cleanedRender.map(
+      (comp) => renderFunc(comp, parser),
+    ).filter(isValidSubValue);
     return renderSubComponents;
   }
 

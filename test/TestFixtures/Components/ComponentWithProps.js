@@ -15,7 +15,11 @@ export default class TestComponent extends Component {
 
   renderTitle() {
     return (
-      <h1>{this.props.title} - {this.props.count}</h1>
+      <h1>
+        {this.props.title}
+        {' - '}
+        {this.props.count}
+      </h1>
     );
   }
 
